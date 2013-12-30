@@ -10,122 +10,76 @@
 #include <map>
 #include <cstdlib>
 
+#include "Cell.hpp"
+#include "Laser.hpp"
+
 #define NUMROWS 5
 #define NUMCOLS 5
 
 namespace
 {
-    enum Directions {
-        Nowhere = 0,
-        Left = 1,
-        Up = 2,
-        Right = 3,
-        Down = 4
-    };
-    
-    typedef std::pair<int16_t,int16_t> CellCoordinates;
-    typedef std::map<Directions,CellCoordinates> TableForDirection;
-    
-    class Cell {
-        CellCoordinates myCoordinates_;
-        bool beenVisited_;
-        const Directions myDirection_;
-        
-    public:
-        Cell(int16_t x,int16_t y,Directions direction)
-        : myCoordinates_(std::make_pair(x,y))
-        , beenVisited_(false)
-        , myDirection_(direction)
-        {}
-        
-        bool getVisitStatus(void) const;
-        Directions getDirection(void) const;
-        CellCoordinates getCoordinates(void) const;
-        void setVisited(void);
-        
-    };
-    
-    class Laser {
-        TableForDirection table_;
-        CellCoordinates currentCoordinates_;
-        Directions directionToGo_;
-        
-        void createTable(void);
-        CellCoordinates getNewCoordinates(Directions const direction);
-        
-    public:
-        Laser(CellCoordinates startCoordinate)
-        : currentCoordinates_(startCoordinate)
-        , directionToGo_(Directions::Right)
-        {
-            createTable();
-        }
-        
-        const CellCoordinates moveNext(Cell& currentCell);
-        
-    };
     typedef std::map<CellCoordinates, Cell> Room;
     Room room;
 }
 
-namespace {
+
     
-    bool Cell::getVisitStatus(void) const
-    {
-        return beenVisited_;
-    }
-    
-    Directions Cell::getDirection(void) const
-    {
-        return myDirection_;
-    }
-    
-    CellCoordinates Cell::getCoordinates(void) const
-    {
-        std::cout << "Visting cell (" << myCoordinates_.first << "," << myCoordinates_.second << "). ";
-        return myCoordinates_;
-    }
-    
-    void Cell::setVisited(void)
-    {
-        beenVisited_ = true;
-    }
-}
-namespace  {
-    
-    void Laser::createTable(void)
-    {
-        table_.emplace(Directions::Left, std::make_pair(-1, 0));
-        table_.emplace(Directions::Right, std::make_pair(1, 0));
-        table_.emplace(Directions::Up, std::make_pair(0, 1));
-        table_.emplace(Directions::Down, std::make_pair(0, -1));
-    }
-    
-    CellCoordinates Laser::getNewCoordinates(Directions const direction)
-    {
-        TableForDirection::iterator offset = table_.find(direction);
-        return std::make_pair(currentCoordinates_.first + offset->second.first,
-                              currentCoordinates_.second + offset->second.second);
-    }
-    
-    const CellCoordinates Laser::moveNext(Cell &currentCell)
-    {
-        if (currentCell.getVisitStatus()) {
-            std::cerr << "You are in a loop" << std::endl;
-            return std::make_pair(-1, -1);
-        }
-        currentCell.setVisited();
-        currentCoordinates_ = currentCell.getCoordinates();
-        directionToGo_ = ((currentCell.getDirection() == Directions::Nowhere) ?
-                                                        directionToGo_ : currentCell.getDirection());
-        std::cout << "Next Direction: " << directionToGo_ << std::endl;
-        return getNewCoordinates(directionToGo_);
-    }
+bool Cell::getVisitStatus(void) const
+{
+    return beenVisited_;
 }
 
+Directions Cell::getDirection(void) const
+{
+    if ( Directions::Nowhere == myDirection_) {
+        std::cerr << "Go Nowhere! ";
+    }
+    return myDirection_;
+}
+
+CellCoordinates Cell::getCoordinates(void) const
+{
+    std::cout << "Visting cell (" << myCoordinates_.first << "," << myCoordinates_.second << "). ";
+    return myCoordinates_;
+}
+
+void Cell::setVisited(void)
+{
+    beenVisited_ = true;
+}
+
+
+void Laser::createTable(void)
+{
+    table_.emplace(Directions::Left, std::make_pair(-1, 0));
+    table_.emplace(Directions::Right, std::make_pair(1, 0));
+    table_.emplace(Directions::Up, std::make_pair(0, 1));
+    table_.emplace(Directions::Down, std::make_pair(0, -1));
+}
+
+CellCoordinates Laser::getNewCoordinates(Directions const direction)
+{
+    TableForDirection::iterator offset = table_.find(direction);
+    return std::make_pair(currentCoordinates_.first + offset->second.first,
+                          currentCoordinates_.second + offset->second.second);
+}
+
+const CellCoordinates Laser::moveNext(Cell &currentCell)
+{
+    if (currentCell.getVisitStatus()) {
+        std::cerr << "You are in a loop" << std::endl;
+        return std::make_pair(-1, -1);
+    }
+    currentCell.setVisited();
+    currentCoordinates_ = currentCell.getCoordinates();
+    directionToGo_ = ((currentCell.getDirection() == Directions::Nowhere) ?
+                      directionToGo_ : currentCell.getDirection());
+    std::cout << "Next Direction: " << directionToGo_ << std::endl;
+    return getNewCoordinates(directionToGo_);
+}
+
+
 namespace {
-    
-    
     void createRoom(uint32_t xMax, uint32_t yMax)
     {
         std::srand((unsigned int)std::time(0));

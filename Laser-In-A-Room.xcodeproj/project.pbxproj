@@ -28,6 +28,8 @@
 		CD36A50F1871101C00824A99 /* Laser-In-A-Room */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Laser-In-A-Room"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD36A5121871101C00824A99 /* Laser-In-A-Room.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "Laser-In-A-Room.cpp"; sourceTree = "<group>"; };
 		CD36A5141871101C00824A99 /* Laser_In_A_Room.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Laser_In_A_Room.1; sourceTree = "<group>"; };
+		CDA54876187121D400078E6B /* Cell.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cell.hpp; sourceTree = "<group>"; };
+		CDA548771871228B00078E6B /* Laser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Laser.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,8 @@
 			isa = PBXGroup;
 			children = (
 				CD36A5121871101C00824A99 /* Laser-In-A-Room.cpp */,
+				CDA548771871228B00078E6B /* Laser.hpp */,
+				CDA54876187121D400078E6B /* Cell.hpp */,
 				CD36A5141871101C00824A99 /* Laser_In_A_Room.1 */,
 			);
 			path = "Laser-In-A-Room";
@@ -225,6 +229,7 @@
 				CD36A51A1871101C00824A99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
