@@ -16,10 +16,11 @@
 namespace
 {
     enum Directions {
-        Left = 0,
-        Up = 1,
-        Right = 2,
-        Down = 3
+        Nowhere = 0,
+        Left = 1,
+        Up = 2,
+        Right = 3,
+        Down = 4
     };
     
     typedef std::pair<int16_t,int16_t> CellCoordinates;
@@ -47,6 +48,7 @@ namespace
     class Laser {
         TableForDirection table_;
         CellCoordinates currentCoordinates_;
+        Directions directionToGo_;
         
         void createTable(void);
         CellCoordinates getNewCoordinates(Directions const direction);
@@ -54,6 +56,7 @@ namespace
     public:
         Laser(CellCoordinates startCoordinate)
         : currentCoordinates_(startCoordinate)
+        , directionToGo_(Directions::Right)
         {
             createTable();
         }
@@ -74,7 +77,6 @@ namespace {
     
     Directions Cell::getDirection(void) const
     {
-        std::cout << "Next Direction: " << myDirection_ << std::endl;
         return myDirection_;
     }
     
@@ -114,7 +116,10 @@ namespace  {
         }
         currentCell.setVisited();
         currentCoordinates_ = currentCell.getCoordinates();
-        return getNewCoordinates(currentCell.getDirection());
+        directionToGo_ = ((currentCell.getDirection() == Directions::Nowhere) ?
+                                                        directionToGo_ : currentCell.getDirection());
+        std::cout << "Next Direction: " << directionToGo_ << std::endl;
+        return getNewCoordinates(directionToGo_);
     }
 }
 
@@ -126,7 +131,7 @@ namespace {
         std::srand((unsigned int)std::time(0));
         for (int32_t x=0; x < xMax; ++x) {
             for (int32_t y=0; y < yMax; ++y) {
-                room.emplace(std::make_pair(x, y), Cell(x, y, Directions(std::rand()%4)));
+                room.emplace(std::make_pair(x, y), Cell(x, y, Directions(std::rand()%5)));
             }
         }
     }
