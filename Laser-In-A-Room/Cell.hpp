@@ -8,6 +8,10 @@
 
 #ifndef Laser_In_A_Room_Cell_hpp
 #define Laser_In_A_Room_Cell_hpp
+
+#include <cstdint>
+#include <utility>
+
 enum Directions {
     Nowhere = 0,
     Left = 1,
@@ -16,7 +20,7 @@ enum Directions {
     Down = 4
 };
 
-typedef std::pair<int16_t,int16_t> CellCoordinates;
+using CellCoordinates = std::pair<int16_t,int16_t>;
 
 class Cell {
     CellCoordinates myCoordinates_;
@@ -26,8 +30,8 @@ class Cell {
 public:
     Cell(int16_t x,int16_t y,Directions direction)
     : myCoordinates_(std::make_pair(x,y))
-    , beenVisited_(false)
-    , myDirection_(direction)
+    , beenVisited_(std::move(false))
+    , myDirection_(std::move(direction))
     {}
     
     bool getVisitStatus(void) const;

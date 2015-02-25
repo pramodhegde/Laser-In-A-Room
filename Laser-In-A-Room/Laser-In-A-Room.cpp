@@ -18,7 +18,7 @@
 
 namespace
 {
-    typedef std::map<CellCoordinates, Cell> Room;
+    using Room = std::map<CellCoordinates, Cell>;
     Room room;
 }
 
@@ -83,8 +83,9 @@ namespace {
     void createRoom(uint32_t xMax, uint32_t yMax)
     {
         std::srand((unsigned int)std::time(0));
-        for (int32_t x=0; x < xMax; ++x) {
-            for (int32_t y=0; y < yMax; ++y) {
+
+        for (uint32_t x=0; x < xMax; ++x) {
+            for (uint32_t y=0; y < yMax; ++y) {
                 room.emplace(std::make_pair(x, y), Cell(x, y, Directions(std::rand()%5)));
             }
         }
@@ -111,6 +112,8 @@ namespace {
 
 int main(int argc, const char * argv[])
 {
+    (void) argc;
+    (void) argv;
     createRoom(NUMROWS, NUMCOLS);
     play();
     return 0;
